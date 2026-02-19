@@ -1,0 +1,41 @@
+# System Files
+.DS_Store
+Thumbs.db
+
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Production / Build
+dist
+dist-ssr
+build
+out/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Remotion & Temporary
+*.zip
+*.mp4
+map-config*.json
+.remotion
+ref/
+src/reference/
+
+# Editor
+.vscode
+.idea
+*.swp
+*.swo
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
