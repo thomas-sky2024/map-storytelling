@@ -3,7 +3,7 @@ import { useAppStore } from '../../store/useAppStore';
 import { Upload, FileJson, X } from 'lucide-react';
 
 export const LayerManager: React.FC = () => {
-    const { overlayData, setOverlayData } = useAppStore();
+    const { overlayData, setOverlayData, showDataCounters, setShowDataCounters, showWarningSystem, setShowWarningSystem } = useAppStore();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,6 +60,27 @@ export const LayerManager: React.FC = () => {
                     </button>
                 </div>
             )}
+
+            <div className="mt-4 space-y-2 border-t border-gray-700/50 pt-4">
+                <label className="flex items-center justify-between text-xs text-gray-300 cursor-pointer">
+                    <span>Data Counters</span>
+                    <input
+                        type="checkbox"
+                        checked={showDataCounters}
+                        onChange={(e) => setShowDataCounters(e.target.checked)}
+                        className="rounded border-gray-700 bg-gray-900 text-blue-500 focus:ring-blue-500 focus:ring-offset-gray-900"
+                    />
+                </label>
+                <label className="flex items-center justify-between text-xs text-gray-300 cursor-pointer">
+                    <span>Warning System</span>
+                    <input
+                        type="checkbox"
+                        checked={showWarningSystem}
+                        onChange={(e) => setShowWarningSystem(e.target.checked)}
+                        className="rounded border-gray-700 bg-gray-900 text-blue-500 focus:ring-blue-500 focus:ring-offset-gray-900"
+                    />
+                </label>
+            </div>
         </div>
     );
 };

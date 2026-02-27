@@ -29,6 +29,8 @@ interface AppState {
     currentCamera: CameraState;
     mapStyle: string;
     overlayData: any | null; // GeoJSON
+    showDataCounters: boolean;
+    showWarningSystem: boolean;
 
     // Timeline
     currentTime: number; // Current frame
@@ -45,6 +47,8 @@ interface AppState {
     setCurrentCamera: (camera: CameraState) => void;
     setMapStyle: (style: string) => void;
     setOverlayData: (data: any) => void;
+    setShowDataCounters: (show: boolean) => void;
+    setShowWarningSystem: (show: boolean) => void;
 
     addKeyframe: (keyframe: Keyframe) => void;
     updateKeyframe: (id: string, updates: Partial<Keyframe>) => void;
@@ -73,6 +77,8 @@ export const useAppStore = create<AppState>()(
             flyToTarget: null,
             mapStyle: 'mapbox://styles/mapbox/dark-v11',
             overlayData: null,
+            showDataCounters: true,
+            showWarningSystem: true,
             mapboxToken: '',
             projection: 'globe',
             mode: 'edit',
@@ -90,6 +96,8 @@ export const useAppStore = create<AppState>()(
             setCurrentCamera: (currentCamera) => set({ currentCamera }),
             setMapStyle: (mapStyle) => set({ mapStyle }),
             setOverlayData: (overlayData) => set({ overlayData }),
+            setShowDataCounters: (showDataCounters) => set({ showDataCounters }),
+            setShowWarningSystem: (showWarningSystem) => set({ showWarningSystem }),
             setMapboxToken: (mapboxToken) => set({ mapboxToken }),
             setProjection: (projection) => set({ projection }),
             setMode: (mode) => set({ mode }),
@@ -121,7 +129,9 @@ export const useAppStore = create<AppState>()(
                 mapboxToken: state.mapboxToken,
                 keyframes: state.keyframes,
                 mapStyle: state.mapStyle,
-                projection: state.projection
+                projection: state.projection,
+                showDataCounters: state.showDataCounters,
+                showWarningSystem: state.showWarningSystem
             }),
         }
     )

@@ -22,6 +22,7 @@ interface MapComponentProps {
     } | null;
     overlayData?: any | null; // GeoJSON
     projection?: 'globe' | 'mercator';
+    currentFrame?: number;
     onCameraChange?: (state: { lng: number; lat: number; zoom: number; pitch: number; bearing: number }) => void;
     onLoad?: () => void;
 }
@@ -38,6 +39,7 @@ export const MapComponent: React.FC<MapComponentProps> = ({
     viewState,
     overlayData,
     projection = 'globe',
+    currentFrame,
     onCameraChange,
     onLoad
 }) => {
@@ -214,6 +216,31 @@ export const MapComponent: React.FC<MapComponentProps> = ({
 
         clearFlyTo();
     }, [flyToTarget]);
+
+    // Animated dash array logic
+    useEffect(() => {
+        if (!map.current || !map.current.isStyleLoaded() || typeof currentFrame === 'undefined') return;
+        if (!map.current.getLayer('overlay-layer')) return;
+
+        const dashLength = 3;
+        const gapLength = 3;
+        const period = dashLength + gapLength;
+        const speed = 0.5; // units per frame
+
+        let step = (currentFrame * speed) % period;
+        // Make it flow backwards (classic route drawing direction)
+        step = period - step;
+
+        let dashArray: number[];
+        if (step <= gapLength) {
+            dashArray = [0, step, dashLength, gapLength - step];
+        } else {
+            const remainingDash = period - step;
+            dashArray = [step - gapLength, gapLength, remainingDash, 0];
+        }
+
+        map.current.setPaintProperty('overlay-layer', 'line-dasharray', dashArray);
+    }, [currentFrame, overlayData]);
 
     // Initialize Map
     useEffect(() => {

@@ -14,6 +14,8 @@ interface MapCompositionProps {
     fps?: number;
     width?: number;
     height?: number;
+    showDataCounters?: boolean;
+    showWarningSystem?: boolean;
 }
 
 export const MapComposition: React.FC<MapCompositionProps> = ({
@@ -21,7 +23,9 @@ export const MapComposition: React.FC<MapCompositionProps> = ({
     mapboxToken,
     mapStyle,
     overlayData,
-    projection
+    projection,
+    showDataCounters = true,
+    showWarningSystem = true
 }) => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
@@ -82,9 +86,9 @@ export const MapComposition: React.FC<MapCompositionProps> = ({
                 projection={projection}
                 overlayData={overlayData}
                 viewState={cameraState}
+                currentFrame={frame}
                 onLoad={resolveFrame}
                 className="w-full h-full"
-                // Force explicit dimensions
                 containerStyle={{ width: '100%', height: '100%' }}
             />
 
@@ -94,28 +98,39 @@ export const MapComposition: React.FC<MapCompositionProps> = ({
                 <div className="absolute inset-0 shadow-[inset_0_0_150px_rgba(0,0,0,0.6)]" />
 
                 {/* Top Info Labels */}
-                <div className="absolute top-12 left-12 flex gap-4">
-                    <div className="bg-black/80 backdrop-blur-md border-l-4 border-blue-500 p-5 shadow-2xl">
-                        <div className="text-[10px] text-blue-400 font-black uppercase tracking-[0.2em] mb-1">Satellite Navigation</div>
-                        <div className="text-3xl font-black text-white tracking-tighter tabular-nums">
-                            {cameraState.lat.toFixed(4)}°N {cameraState.lng.toFixed(4)}°E
-                        </div>
-                        <div className="flex gap-4 mt-3">
-                            <div className="flex flex-col">
-                                <span className="text-[8px] text-gray-500 font-black uppercase tracking-widest">Altitude</span>
-                                <span className="text-xs font-bold text-gray-300">{(cameraState.zoom * 1500).toFixed(0)}m</span>
+                {showDataCounters && (
+                    <div className="absolute top-12 left-12 flex gap-4">
+                        <div className="bg-black/80 backdrop-blur-md border-l-4 border-blue-500 p-5 shadow-2xl">
+                            <div className="text-[10px] text-blue-400 font-black uppercase tracking-[0.2em] mb-1">Satellite Navigation</div>
+                            <div className="text-3xl font-black text-white tracking-tighter tabular-nums">
+                                {cameraState.lat.toFixed(4)}°N {cameraState.lng.toFixed(4)}°E
                             </div>
-                            <div className="flex flex-col">
-                                <span className="text-[8px] text-gray-500 font-black uppercase tracking-widest">Pitch</span>
-                                <span className="text-xs font-bold text-gray-300">{cameraState.pitch.toFixed(1)}°</span>
-                            </div>
-                            <div className="flex flex-col">
-                                <span className="text-[8px] text-gray-500 font-black uppercase tracking-widest">Bearing</span>
-                                <span className="text-xs font-bold text-gray-300">{cameraState.bearing.toFixed(1)}°</span>
+                            <div className="flex gap-4 mt-3">
+                                <div className="flex flex-col">
+                                    <span className="text-[8px] text-gray-500 font-black uppercase tracking-widest">Altitude</span>
+                                    <span className="text-xs font-bold text-gray-300">{(cameraState.zoom * 1500).toFixed(0)}m</span>
+                                </div>
+                                <div className="flex flex-col">
+                                    <span className="text-[8px] text-gray-500 font-black uppercase tracking-widest">Pitch</span>
+                                    <span className="text-xs font-bold text-gray-300">{cameraState.pitch.toFixed(1)}°</span>
+                                </div>
+                                <div className="flex flex-col">
+                                    <span className="text-[8px] text-gray-500 font-black uppercase tracking-widest">Bearing</span>
+                                    <span className="text-xs font-bold text-gray-300">{cameraState.bearing.toFixed(1)}°</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                )}
+
+                {/* Dynamic Warning System */}
+                {showWarningSystem && cameraState.pitch > 60 && (
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-900/80 backdrop-blur-lg border-2 border-red-500 p-8 rounded-xl shadow-[0_0_50px_rgba(239,68,68,0.5)] flex flex-col items-center">
+                        <div className="text-red-400 text-sm font-black uppercase tracking-[0.5em] mb-2 animate-pulse">Warning</div>
+                        <div className="text-white text-4xl font-black uppercase tracking-wider">Low Altitude</div>
+                        <div className="text-red-200 mt-2 text-sm">PITCH ANGLE CRITICAL ({cameraState.pitch.toFixed(1)}°)</div>
+                    </div>
+                )}
 
                 {/* REC Indicator */}
                 <div className="absolute top-12 right-12 flex items-center gap-4 bg-black/60 backdrop-blur-md px-6 py-3 rounded-full border border-white/10 shadow-2xl">
@@ -157,7 +172,7 @@ export const MapComposition: React.FC<MapCompositionProps> = ({
                     </div>
                 </div>
             </AbsoluteFill>
-        </AbsoluteFill>
+        </AbsoluteFill >
     );
 };
 

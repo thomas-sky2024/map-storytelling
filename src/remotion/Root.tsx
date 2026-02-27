@@ -19,7 +19,9 @@ export const RemotionRoot: React.FC = () => {
                     durationInFrames: 300,
                     fps: 30,
                     width: 1920,
-                    height: 1080
+                    height: 1080,
+                    showDataCounters: true,
+                    showWarningSystem: true
                 }}
                 calculateMetadata={async ({ props }) => {
                     return {

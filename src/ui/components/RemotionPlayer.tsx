@@ -4,7 +4,7 @@ import { MapComposition } from '../../remotion/MapComposition';
 import { useAppStore } from '../../store/useAppStore';
 
 export const RemotionPlayer: React.FC = () => {
-    const { keyframes, mapboxToken, fps, durationInFrames, width, height, currentTime, setCurrentTime, mapStyle, overlayData, projection } = useAppStore();
+    const { keyframes, mapboxToken, fps, durationInFrames, width, height, currentTime, setCurrentTime, mapStyle, overlayData, projection, showDataCounters, showWarningSystem } = useAppStore();
     const playerRef = React.useRef<PlayerRef>(null);
 
     // Sync Store -> Player (when clicking keyframes or scrubbing timeline)
@@ -42,6 +42,8 @@ export const RemotionPlayer: React.FC = () => {
                         mapStyle,
                         overlayData,
                         projection,
+                        showDataCounters,
+                        showWarningSystem,
                         durationInFrames,
                         fps,
                         width,
